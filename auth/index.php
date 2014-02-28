@@ -12,9 +12,14 @@
 require '../app.php';
 
 //specify routes
-$app->get('/cypher/:mode/:inputString', function($mode, $inputString) use ($app) {
-    require_once 'classes/Cypher.class.php';
-    echo Cypher::getEncryptedString($inputString, $mode);
+$app->group('/FIPSCypher', function() use($app) {
+    require_once 'classes/FIPSCypher.class.php';
+    $app->get('/encrypt/:mode/:inputString', function($mode, $inputString) use($app) {
+        echo FIPSCypher::encryptString($inputString, $mode);
+    });
+    $app->get('/encryptMany/:mode/:inputJSON', function($mode, $inputJSON) use($app) {
+        echo FIPSCypher::encryptJSONList($inputJSON, $mode);
+    });
 });
 
 $app->run();
