@@ -40,7 +40,7 @@ class FIPSCypher extends Cypher {
             return $string;
         }
         exec ('export OPENSSL_FIPS=1');
-        $execStr = "echo " . escapeshellarg(escapeshellcmd($string)) . " | "
+        $execStr = "echo " . escapeshellarg($string) . " | "
             . self::FIPS_OPENSSL_PATH . " " . $this->get('cypherMethod') . " "
             . "-e -a -K " . $this->get('cypherKey') . " -iv "
             . $this->get('cypherIV');
