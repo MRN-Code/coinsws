@@ -44,7 +44,15 @@ class FIPSCypher extends Cypher {
             . self::FIPS_OPENSSL_PATH . " " . $this->get('cypherMethod') . " "
             . "-e -a -K " . $this->get('cypherKey') . " -iv "
             . $this->get('cypherIV');
-        return exec($execStr);
+        $encryptedString = exec($execStr, $outputs, $returnVal);
+        if ($returnVal != 0) {
+            //something went wrong, non-zero exit code given
+            throw new Exception(
+                __FUNCTION__ . ': error while encrypting: '
+                . implode("\n", $output)
+            );
+        }
+        return $encryptedString;
     }
 
     public function decrypt($string) {
@@ -58,6 +66,14 @@ class FIPSCypher extends Cypher {
             . self::FIPS_OPENSSL_PATH . " " . $this->get('cypherMethod') . " "
             . "-d -a -K " . $this->get('cypherKey') . " " . "-iv "
             . $this->get('cypherIV');
-        return exec($execStr);
+        $decryptedString = exec($execStr, $outputs, $returnVal);
+        if ($returnVal != 0) {
+            //something went wrong, non-zero exit code given
+            throw new Exception(
+                __FUNCTION__ . ': error while decrypting: '
+                . implode("\n", $output)
+            );
+        }
+        return $decryptedString;
     }
 }
