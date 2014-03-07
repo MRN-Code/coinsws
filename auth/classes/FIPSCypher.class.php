@@ -1,4 +1,6 @@
 <?php
+        
+setlocale(LC_CTYPE, "en_US.UTF-8");
 require 'classes/auth/Cypher.class.php';
 /**
  *Class to handle encryption and decryption
@@ -61,7 +63,6 @@ class FIPSCypher extends Cypher {
             return $string;
         }
         exec ('export OPENSSL_FIPS=1');
-        $string = base64_decode($string);
         $execStr = "echo " . escapeshellarg($string) . " | "
             . self::FIPS_OPENSSL_PATH . " " . $this->get('cypherMethod') . " "
             . "-d -a -K " . $this->get('cypherKey') . " " . "-iv "
